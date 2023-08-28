@@ -1,0 +1,13 @@
+langchain
+openai
+streamlit
+tiktoken
+pandas
+tabulate
+streamlit
+uuid
+Pillow~=9.4.0
+streamlit_option_menu
+configparser
+python-dotenv
+deepchecks-llm-client
