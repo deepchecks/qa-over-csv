@@ -6,6 +6,7 @@ import streamlit as st
 from deepchecks_llm_client.api import EnvType
 from deepchecks_llm_client.client import dc_client
 from streamlit_option_menu import option_menu
+import pandas as pd
 
 if platform.system() == 'Windows':
     pathlib.PosixPath = pathlib.WindowsPath
@@ -133,3 +134,5 @@ def initialize_session_state():
         st.session_state.current_page = ""
     if "application_details" not in st.session_state:
         st.session_state.application_details = {}
+    if "dataset" not in st.session_state:
+        st.session_state.dataset = pd.DataFrame()

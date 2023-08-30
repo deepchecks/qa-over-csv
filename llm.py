@@ -13,5 +13,4 @@ def call_llm_with_chatopenai(df, user_input):
 
 
     response = agent({"input": user_input}, include_run_info=True)
-    st.write(response)
     return fetch_prompts_chatopenai(response)
