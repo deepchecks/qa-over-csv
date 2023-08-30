@@ -117,7 +117,7 @@ def initialize_deepchecks_client(config):
                     app_name=config['DEEPCHECKS_LLM_APP_NAME'],
                     version_name=config['DEEPCHECKS_LLM_APP_VERSION_NAME'],
                     env_type=EnvType.PROD,
-                    auto_collect=True)
+                    auto_collect=False)
 
 def initialize_session_state():
     if "is_annotated" not in st.session_state:

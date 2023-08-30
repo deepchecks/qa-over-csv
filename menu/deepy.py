@@ -29,6 +29,14 @@ def create_ask_deepy_bot():
                 with st.spinner('Loading result...'):
                     result = call_llm_with_chatopenai(st.session_state.dataset, user_input)
                     st.write(result)
+                    ext_id = str(uuid.uuid4())
+                    dc_client.set_tags({Tag.USER_ID: "A05fdfbb2035e@gmail.com"})
+                    dc_client.log_interaction(user_input=result['user_input'],
+                          model_response=result['response'],
+                          full_prompt=result['llm_prompt'],
+                          information_retrieval=str(result['information_retrieval']),
+                          ext_interaction_id=ext_id)
+                    dc_client.set_tags({})
                 st.session_state.llm_response = result['response']
                 st.session_state.is_annotated = False
 

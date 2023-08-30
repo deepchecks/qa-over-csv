@@ -30,8 +30,9 @@ if (deepchecks_llm_app_name not in list(response['application_details'].keys()) 
 elif response['status_code'] != 200:
     st.error({'status_code': response['status_code'], 'text': response['text'], 'solution': 'Make sure that your API keys are correct.'})
 else:
-    # if dc_client.api is None and st.session_state.current_page != 'Settings':
-    #     initialize_deepchecks_client(config)
+    if dc_client.api is None and st.session_state.current_page != 'Settings':
+        st.write('dc init()')
+        initialize_deepchecks_client(config)
 
     if st.session_state.current_page == 'Settings':
         st.session_state.llm_response = ""
