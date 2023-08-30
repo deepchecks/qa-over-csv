@@ -2,6 +2,7 @@ from langchain.agents import create_pandas_dataframe_agent
 from langchain.chat_models import ChatOpenAI
 from langchain.agents.agent_types import AgentType
 from utils.llm_utils import fetch_prompts_chatopenai
+import streamlit as st
 
 def call_llm_with_chatopenai(df, user_input):
     open("./logs.txt", "w", encoding='utf-8').close()
@@ -12,4 +13,5 @@ def call_llm_with_chatopenai(df, user_input):
 
 
     response = agent({"input": user_input}, include_run_info=True)
+    st.write(response)
     return fetch_prompts_chatopenai(response)

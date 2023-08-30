@@ -11,3 +11,4 @@ streamlit_option_menu
 configparser
 python-dotenv
 deepchecks-llm-client
+coloredlogs
