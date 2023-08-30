@@ -19,19 +19,19 @@ def create_ask_deepy_bot():
             dataframe = pd.read_csv(upload_file, encoding='latin-1') if upload_file.type != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' else pd.read_excel(upload_file)
             st.session_state.dataset = dataframe
 
-    with st.form("user_input"):
-        user_input = st.text_area("User Input:", key="input", placeholder="Enter your question...")
-        submit_button = st.form_submit_button('Submit', use_container_width=True, type="primary")
-        
-        if submit_button and len(st.session_state.dataset) > 0:
-            st.session_state.ext_interaction_id = str(uuid.uuid4())
-            with st.spinner('Loading result...'):
-                # df = pd.read_csv('./assets/titanic.csv')
-                result = call_llm_with_chatopenai(st.session_state.dataset, user_input)
-                st.write(result)
-            st.session_state.llm_response = result
-            st.session_state.is_annotated = False
+    if len(st.session_state.dataset) > 0:
+        with st.form("user_input"):
+            user_input = st.text_area("User Input:", key="input", placeholder="Enter your question...")
+            submit_button = st.form_submit_button('Submit', use_container_width=True, type="primary")
+            
+            if submit_button:
+                st.session_state.ext_interaction_id = str(uuid.uuid4())
+                with st.spinner('Loading result...'):
+                    result = call_llm_with_chatopenai(st.session_state.dataset, user_input)
+                    st.write(result)
+                st.session_state.llm_response = result['response']
+                st.session_state.is_annotated = False
 
-    if user_input:
-        if len(st.session_state.llm_response) > 0:
-            st.info(st.session_state.llm_response, icon="🤖")
+        if user_input:
+            if len(st.session_state.llm_response) > 0:
+                st.info(st.session_state.llm_response, icon="🤖")
