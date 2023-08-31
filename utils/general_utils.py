@@ -18,7 +18,7 @@ def initialize_app():
     logo = Path('./assets/dc-llm-logo.svg').read_text()
     logo_with_link = f'<a href="https://deepchecks.com/get-early-access-deepchecks-llm-evaluation/" target="_blank">{logo}</a>'
 
-    st.set_page_config(page_title="Q&A HR Chatbot", page_icon=icon, layout='wide')
+    st.set_page_config(page_title="Deepy Bot", page_icon=icon, layout='wide')
     st.sidebar.markdown(logo_with_link, unsafe_allow_html=True)
     with st.sidebar:
         page = option_menu(

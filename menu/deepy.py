@@ -10,7 +10,7 @@ import logging
 def create_ask_deepy_bot():
     logging.basicConfig(level=logging.DEBUG)
 
-    st.title('🦜🔗 Ask the CSV App')
+    st.title('🦜🔗 Deepy Bot')
     st.info("Upload any CSV or Excel file containing your dataset and ask questions to it!!")
 
     upload_file = st.file_uploader("Upload dataset", type=['csv','xls','xlsx'])
