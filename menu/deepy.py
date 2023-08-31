@@ -30,10 +30,10 @@ def create_ask_deepy_bot():
                     st.session_state.ext_interaction_id = str(uuid.uuid4())
                     dc_client.set_tags({Tag.USER_ID: "user@deepchecks.com"})
                     dc_client.log_interaction(user_input=result['user_input'],
-                          model_response=result['response'],
-                          full_prompt=result['llm_prompt'],
-                          information_retrieval=str(result['information_retrieval']),
-                          ext_interaction_id=st.session_state.ext_interaction_id)
+                                              model_response=result['response'],
+                                              full_prompt=result['llm_prompt'],
+                                              information_retrieval=str(result['information_retrieval']),
+                                              ext_interaction_id=st.session_state.ext_interaction_id)
                     dc_client.set_tags({})
                 st.session_state.llm_response = result['response']
                 st.session_state.is_annotated = False
