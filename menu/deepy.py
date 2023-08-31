@@ -11,7 +11,7 @@ def create_ask_deepy_bot():
     logging.basicConfig(level=logging.DEBUG)
 
     st.title('🦜🔗 Ask the CSV App')
-    st.info("Most 'question answering' applications run over unstructured text data. But a lot of the data in the world is tabular data! This is an attempt to create an application using [LangChain](https://github.com/langchain-ai/langchain) to let you ask questions of data in tabular format. For this demo application, we will use the Titanic Dataset. Please explore it [here](https://github.com/datasciencedojo/datasets/blob/master/titanic.csv) to get a sense for what questions you can ask. Please leave feedback on well the question is answered, and we will use that improve the application!")
+    st.info("Upload any CSV or Excel file containing your dataset and ask questions to it!!")
 
     upload_file = st.file_uploader("Upload dataset", type=['csv','xls','xlsx'])
     if upload_file is not None:
@@ -25,17 +25,15 @@ def create_ask_deepy_bot():
             submit_button = st.form_submit_button('Submit', use_container_width=True, type="primary")
             
             if submit_button:
-                st.session_state.ext_interaction_id = str(uuid.uuid4())
                 with st.spinner('Loading result...'):
                     result = call_llm_with_chatopenai(st.session_state.dataset, user_input)
-                    st.write(result)
-                    ext_id = str(uuid.uuid4())
+                    st.session_state.ext_interaction_id = str(uuid.uuid4())
                     dc_client.set_tags({Tag.USER_ID: "A05fdfbb2035e@gmail.com"})
                     dc_client.log_interaction(user_input=result['user_input'],
                           model_response=result['response'],
                           full_prompt=result['llm_prompt'],
                           information_retrieval=str(result['information_retrieval']),
-                          ext_interaction_id=ext_id)
+                          ext_interaction_id=st.session_state.ext_interaction_id)
                     dc_client.set_tags({})
                 st.session_state.llm_response = result['response']
                 st.session_state.is_annotated = False
@@ -43,3 +41,56 @@ def create_ask_deepy_bot():
         if user_input:
             if len(st.session_state.llm_response) > 0:
                 st.info(st.session_state.llm_response, icon="🤖")
+            if not st.session_state.is_annotated:
+                placeholder_column = st.empty()
+                columns = placeholder_column.columns(2)
+                with columns[0]:
+                    placeholder_good = st.empty()
+                    good = placeholder_good.button('👍 Good', key='good_btn', use_container_width=True)
+
+                with columns[1]:
+                    placeholder_bad = st.empty()
+                    bad = placeholder_bad.button('👎 Bad', key='bad_btn', use_container_width=True)
+
+                if good or bad:
+                    st.session_state.is_annotated = True
+                    placeholder_good.empty()
+                    placeholder_column.empty()
+                    placeholder_bad.empty()
+                if good:
+                    st.session_state.annotation_message = "Good"
+                    dc_client.annotate(ext_interaction_id=st.session_state.ext_interaction_id, annotation=AnnotationType.GOOD)
+                elif bad:
+                    st.session_state.annotation_message =  "Bad"            
+                    dc_client.annotate(ext_interaction_id=st.session_state.ext_interaction_id, annotation=AnnotationType.BAD)
+
+                if not submit_button and st.session_state.is_annotated:
+                    if 'Bad' in st.session_state.annotation_message:
+                        st.button('👎 Bad', use_container_width=True)
+                        if st.session_state.is_annotated:
+                            st.markdown("""<style>
+                                            [data-testid=stVerticalBlock]>div>div>button,
+                                            [data-testid=stVerticalBlock]>div>div>button:hover,
+                                            [data-testid=stVerticalBlock]>div>div>button:active,
+                                            [data-testid=stVerticalBlock]>div>div>button:focus:not(:active) {
+                                                background-color: #FC636B;
+                                                border: 1px solid #FC636B;
+                                                pointer-events: none;
+                                                color: white;
+                                            }
+                                    </style>""", unsafe_allow_html=True)
+
+                    else:
+                        st.button('👍 Good', use_container_width=True)
+                        if st.session_state.is_annotated:
+                            st.markdown("""<style>
+                                            [data-testid=stVerticalBlock]>div>div>button,
+                                            [data-testid=stVerticalBlock]>div>div>button:hover,
+                                            [data-testid=stVerticalBlock]>div>div>button:active,
+                                            [data-testid=stVerticalBlock]>div>div>button:focus:not(:active) {
+                                                background-color: #37A862;
+                                                border: 1px solid #37A862;
+                                                color: white;
+                                                pointer-events: none;
+                                            }
+                                            </style>""", unsafe_allow_html=True)

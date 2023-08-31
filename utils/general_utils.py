@@ -12,7 +12,6 @@ if platform.system() == 'Windows':
     pathlib.PosixPath = pathlib.WindowsPath
 
 
-
 def initialize_app():
     with Image.open('./assets/favicon.ico') as icon:
         icon.load()
@@ -128,8 +127,6 @@ def initialize_session_state():
         st.session_state.llm_response = ""
     if "ext_interaction_id" not in st.session_state:
         st.session_state.ext_interaction_id = ""
-    if "reload_settings_form" not in st.session_state:
-        st.session_state.reload_settings_form = False
     if "current_page" not in  st.session_state:
         st.session_state.current_page = ""
     if "application_details" not in st.session_state:
