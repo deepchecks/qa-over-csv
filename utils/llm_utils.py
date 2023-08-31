@@ -25,6 +25,6 @@ def fetch_prompts_chatopenai(llm_response):
             'python_script': llm_response['intermediate_steps'][0][0].tool_input if len(llm_response['intermediate_steps']) > 0 else '',
             'script_result': script_result_text
             },
-        'llm_prompt': second_prompt_text,
+        'llm_prompt': second_prompt_text if len(second_prompt_text) > 0 else first_prompt_text,
         'response': llm_response['output']
     }
