@@ -11,7 +11,6 @@ def fetch_prompts_chatopenai(llm_response):
     second_prompt = text[second_prompt_start_index:  second_prompt_end_index]
     second_prompt_text = second_prompt[second_prompt.find('{"messages": ') + len('{"messages": '): second_prompt.find(', "model":')]
     while '{"role": "function",' not in second_prompt_text:
-        print('not found')
         second_prompt_start_index = text.find("""DEBUG:openai:api_version=None data='{"messages": """, second_prompt_start_index + 1)
         second_prompt_end_index = second_prompt_start_index + text.find(', "model":', second_prompt_start_index)
         second_prompt = text[second_prompt_start_index:  second_prompt_end_index]
@@ -19,18 +18,19 @@ def fetch_prompts_chatopenai(llm_response):
         if second_prompt_end_index > len(text):
             break
 
-    if len(second_prompt_text) > 0:
+    python_script = ''
+    for intermediate_steps in llm_response['intermediate_steps']:
+        if intermediate_steps[0].tool == 'python_repl_ast':
+            python_script = intermediate_steps[0].tool_input
+            break
+
+    if len(second_prompt_text) > 0 and len(python_script) > 0:
         script_result_start_index = second_prompt_text.find('{"role": "function", "content": ') + len('{"role": "function", "content": ')
         script_result_end_index = second_prompt_text.find('", "name": "python_repl_ast"', script_result_start_index)
         script_result_text = second_prompt_text[script_result_start_index + 1: script_result_end_index]
     else:
         script_result_text = ''
 
-    python_script = ''
-    for intermediate_steps in llm_response['intermediate_steps']:
-        if intermediate_steps[0].tool == 'python_repl_ast':
-            python_script = intermediate_steps[0].tool_input
-            break
 
     return {
         'user_input': llm_response['input'],

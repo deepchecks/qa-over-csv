@@ -20,7 +20,10 @@ def fetch_application_names_with_versions(config):
     headers = {'Authorization': f'Basic {config["DEEPCHECKS_LLM_API_KEY"]}'}
     response = req.get(f'{config["DEEPCHECKS_LLM_HOST_URL"]}api/v1/applications', headers=headers)
     if response.status_code != 200:
-        return response.status_code, response.text, {}
+        return {
+            'status_code': response.status_code,
+            'text': response.text
+            }
 
     json_response = response.json()
     if st.session_state.application_details:
