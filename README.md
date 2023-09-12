@@ -13,7 +13,7 @@
 - [Deploy the app to Streamlit](#deploy-the-app-to-streamlit)
 
 # App description
-This application utilizes the dataframe agent by Langchain in order to answer questions from a pandas DataFrame. For this application, you can upload any CSV or Excel file and then ask questions about it. We can configure the GPT model utilized to either use GPT-3.5-turbo or GPT-4. To access the information retrieval, the python code snippet to fetch data from the dataframe, and intermediate steps of the agent etc., we log all these things in a text file and then extract the required information.
+This application utilizes the dataframe agent by Langchain in order to answer questions from a pandas DataFrame. For this application, you can upload any CSV or Excel file and then ask questions about it. We can configure the GPT model utilized to either use GPT-3.5-turbo or GPT-4. To access the information retrieval, the python code snippet to fetch data from the dataframe, and intermediate steps of the agent etc., we log all these things in a text file and then extract the required information. You can test the app at [Deepy Bot](https://question-answer-over-csv-deepchecks.streamlit.app/)
 
 > **User Input:** How many rows are there?<br>
   **LLM Response:** There are 1460 rows in the dataframe.
