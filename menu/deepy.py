@@ -2,12 +2,12 @@ import streamlit as st
 import uuid
 from llm import call_llm_with_chatopenai
 from deepchecks_llm_client.api import AnnotationType
-from deepchecks_llm_client.client import dc_client, Tag
+from deepchecks_llm_client.client import dc_client
 import pandas as pd
 import logging
 
 
-def create_ask_deepy_bot():
+def create_ask_deepy_bot(gpt_model_name):
     logging.basicConfig(level=logging.DEBUG)
 
     st.title('🦜🔗 Deepy Bot')
@@ -26,7 +26,7 @@ def create_ask_deepy_bot():
             
             if submit_button:
                 with st.spinner('Loading result...'):
-                    result = call_llm_with_chatopenai(st.session_state.dataset, user_input)
+                    result = call_llm_with_chatopenai(st.session_state.dataset, user_input, gpt_model_name)
                     st.session_state.ext_interaction_id = str(uuid.uuid4())
                     # dc_client.set_tags({Tag.USER_ID: "user@deepchecks.com"})  - Removed so there will be no "Raw Data" in samples page
                     dc_client.log_interaction(user_input=result['user_input'],
